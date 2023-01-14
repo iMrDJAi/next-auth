@@ -337,6 +337,7 @@ export interface CallbacksOptions<P = Profile, A = Account> {
    */
   jwt: (params: {
     token: JWT
+    prevToken?: JWT
     user?: User | AdapterUser
     account?: A | null
     profile?: P

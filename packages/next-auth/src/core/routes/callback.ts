@@ -37,6 +37,15 @@ export default async function callback(params: {
 
   const useJwtSession = sessionStrategy === "jwt"
 
+  const sessionToken = sessionStore.value
+
+  const prevToken = useJwtSession && sessionToken
+    ? await jwt.decode({
+      ...jwt,
+      token: sessionToken,
+    })
+    : undefined
+
   if (provider.type === "oauth") {
     try {
       const {
@@ -126,6 +135,8 @@ export default async function callback(params: {
           }
           const token = await callbacks.jwt({
             token: defaultToken,
+            // @ts-expect-error
+            prevToken,
             user,
             account,
             profile: OAuthProfile,
@@ -271,6 +282,8 @@ export default async function callback(params: {
         }
         const token = await callbacks.jwt({
           token: defaultToken,
+          // @ts-expect-error
+          prevToken,
           user,
           account,
           isNewUser,
@@ -399,6 +412,8 @@ export default async function callback(params: {
 
     const token = await callbacks.jwt({
       token: defaultToken,
+      // @ts-expect-error
+      prevToken,
       user,
       // @ts-expect-error
       account,
